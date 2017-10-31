@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+
+    <item android:title="Contacts"
+        android:id="@+id/menu_contacts"
+        />
+
+    <item android:title="Chats"
+        android:id="@+id/menu_chats"
+        app:showAsAction="never"/>
+
+    <item android:title="Profile"
+        android:id="@+id/menu_profile"
+        app:showAsAction="never"/>
+
+
+    <item android:title="Sign out"
+        android:id="@+id/menu_sign_out"
+        app:showAsAction="never"/>
+
+
+
+</menu>

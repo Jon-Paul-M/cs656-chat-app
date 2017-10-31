@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "634857377705",
+    "firebase_url": "https://chapapplication-ed1cd.firebaseio.com",
+    "project_id": "chapapplication-ed1cd",
+    "storage_bucket": "chapapplication-ed1cd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634857377705:android:04189ba56f6d3a53",
+        "android_client_info": {
+          "package_name": "edu.njit.cs656.chapapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634857377705-8hc8eudp5gvpa9hohgt8a3nc0bca340u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.njit.cs656.chapapplication",
+            "certificate_hash": "d8a44f9395648331e48680606e1bf06f79b6885e"
+          }
+        },
+        {
+          "client_id": "634857377705-t1ugrbddb8h1os1eno3ekqfp9iofva0a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZGXZj2YZPSjE16lYQAAO9x4SabVTYY8c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "634857377705-t1ugrbddb8h1os1eno3ekqfp9iofva0a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
