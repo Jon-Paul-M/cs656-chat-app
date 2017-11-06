@@ -1,31 +1,34 @@
 package edu.njit.cs656.chapapplication;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-import com.firebase.ui.database.FirebaseListAdapter;
-import com.firebase.ui.database.FirebaseListOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.firebase.ui.auth.AuthUI;
-
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.Menu;
-import android.view.MenuItem;
+
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.firebase.ui.database.FirebaseListOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import android.support.annotation.NonNull;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.util.Map;
+
 import edu.njit.cs656.chapapplication.model.ChatMessage;
+import edu.njit.cs656.chapapplication.model.Conversation;
+import edu.njit.cs656.chapapplication.model.Message;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String MESSAGE_SIGNOUT = "You have been signed out.";
 
     private FirebaseListAdapter<ChatMessage> adapter;
+    private FirebaseListAdapter<Conversation> adapter2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +57,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         FloatingActionButton fab =
-                (FloatingActionButton)findViewById(R.id.fab);
+                findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText input = (EditText)findViewById(R.id.input);
+                EditText input = findViewById(R.id.input);
 
                 // Read the input field and push a new instance
                 // of ChatMessage to the Firebase database
@@ -78,7 +82,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayChatMessages() {
-        ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
+        loadConversations();
+        //loadConversationsGood();
+    }
+
+    private void loadConversationsGood() {
+        ListView listOfMessages = findViewById(R.id.list_of_messages);
 
 
 
@@ -100,15 +109,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         adapter = new FirebaseListAdapter<ChatMessage>(options) {
-
-
             @Override
             protected void populateView(View v, ChatMessage model, int position) {
-                Log.d(this.getClass().getName(), "JPM1");
                 // Get references to the views of message.xml
-                TextView messageText = (TextView)v.findViewById(R.id.message_text);
-                TextView messageUser = (TextView)v.findViewById(R.id.message_user);
-                TextView messageTime = (TextView)v.findViewById(R.id.message_time);
+                TextView messageText = v.findViewById(R.id.message_text);
+                TextView messageUser = v.findViewById(R.id.message_user);
+                TextView messageTime = v.findViewById(R.id.message_time);
 
                 // Set their text
                 messageText.setText(model.getMessageText());
@@ -119,8 +125,42 @@ public class MainActivity extends AppCompatActivity {
                         model.getMessageTime()));
             }
         };
-
         listOfMessages.setAdapter(adapter);
+    }
+
+    private void loadConversations() {
+        ListView listOfMessages = findViewById(R.id.list_of_messages);
+
+        FirebaseListOptions.Builder<Conversation> builder = new FirebaseListOptions.Builder<>();
+        builder.setLayout(R.layout.message);
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("conversation")
+                .limitToLast(50);
+        builder.setQuery(query, Conversation.class);
+        builder.setLifecycleOwner(this);
+
+
+        FirebaseListOptions<Conversation> options = builder.build();
+        Log.d(this.getClass().getSimpleName(), "JPM2");
+        Log.d(this.getClass().getSimpleName(), query.toString());
+        Log.d(this.getClass().getSimpleName(), options.toString());
+
+
+        adapter2 = new FirebaseListAdapter<Conversation>(options) {
+            @Override
+            protected void populateView(View v, Conversation model, int position) {
+                Log.d(this.getClass().getSimpleName(), "position: " + position);
+                for (Map.Entry<String, Message> entry : model.getMessages().entrySet()) {
+                    String key = entry.getKey();
+                    Message value = entry.getValue();
+                    Log.d(this.getClass().getSimpleName(), "key: " + key);
+                    Log.d(this.getClass().getSimpleName(), "value: " + value.toString());
+                }
+            }
+        };
+        listOfMessages.setAdapter(adapter2);
+
     }
 
     @Override
