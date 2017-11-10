@@ -30,20 +30,21 @@ import edu.njit.cs656.chapapplication.model.Message;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int SIGN_IN_REQUEST_CODE = 100;
+  private static final int SIGN_IN_REQUEST_CODE = 100;
 
-    private static final String MESSAGE_SIGNIN_ERROR = "We couldn't sign you in. Please try again later.";
-    private static final String MESSGE_SIGNIN_SUCCESSFUL = "Successfully signed in. Welcome!";
-    private static final String MESSAGE_SIGNOUT = "You have been signed out.";
+  private static final String MESSAGE_SIGNIN_ERROR = "We couldn't sign you in. Please try again later.";
+  private static final String MESSGE_SIGNIN_SUCCESSFUL = "Successfully signed in. Welcome!";
+  private static final String MESSAGE_SIGNOUT = "You have been signed out.";
 
-    private FirebaseListAdapter<Message> adapter;
+  private String currentChatId = "c000001";
 
-    @Override
+  private FirebaseListAdapter<Message> adapter;
+
+  @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-        //if (true) {
             // Start sign in/sign up activity
             startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().build(), SIGN_IN_REQUEST_CODE);
         } else {
@@ -53,8 +54,7 @@ public class MainActivity extends AppCompatActivity {
             displayChatMessages();
         }
 
-        FloatingActionButton fab =
-                findViewById(R.id.fab);
+    FloatingActionButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
                 // Read the input field and push a new instance
                 // of Message to the Firebase database
                 FirebaseDatabase.getInstance()
-                        .getReference()
+                    .getReference()
                     .child("message")
-                    .child("c000001")
-                        .push()
+                    .child(currentChatId)
+                    .push()
                     .setValue(new Message(FirebaseAuth.getInstance()
                             .getCurrentUser()
                             .getDisplayName(),
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                             input.getText().toString(),
                             (new Date()).getTime()
                         )
-                        );
+                    );
                 // Clear the input
                 input.setText("");
             }
@@ -85,10 +85,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayChatMessages() {
-        loadConversations();
-    }
-
-    private void loadConversations() {
         ListView listOfMessages = findViewById(R.id.list_of_messages);
 
         FirebaseListOptions.Builder<Message> builder = new FirebaseListOptions.Builder<>();
@@ -96,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
             .child("messages")
-            .child("c000001");
+            .child(currentChatId);
         builder.setQuery(query, Message.class);
         builder.setLifecycleOwner(this);
 
@@ -124,12 +120,9 @@ public class MainActivity extends AppCompatActivity {
                 // Format the date before showing it
                 messageTime.setText(DateFormat.format("MM-dd-yyyy (hh:mm:ss aa)",
                     model.getTime()));
-
-
             }
         };
         listOfMessages.setAdapter(adapter);
-
     }
 
     @Override
