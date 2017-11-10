@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import edu.njit.cs656.chapapplication.R;
+import edu.njit.cs656.chapapplication.activity.ChatsActivity;
 import edu.njit.cs656.chapapplication.activity.ContactsActivity;
 
 /**
@@ -28,7 +29,9 @@ public class OptionsMenuHelper {
       intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
       activity.startActivity(intent);
     } else if (item.getItemId() == R.id.menu_chats) {
-
+      Intent intent = new Intent(activity, ChatsActivity.class);
+      intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+      activity.startActivity(intent);
     } else if (item.getItemId() == R.id.menu_profile) {
 
     } else if (item.getItemId() == R.id.menu_sign_out) {

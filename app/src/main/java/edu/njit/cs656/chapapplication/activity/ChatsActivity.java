@@ -13,7 +13,7 @@ import edu.njit.cs656.chapapplication.R;
 import edu.njit.cs656.chapapplication.model.Message;
 import edu.njit.cs656.chapapplication.tools.OptionsMenuHelper;
 
-public class ContactsActivity extends AppCompatActivity {
+public class ChatsActivity extends AppCompatActivity {
 
   private static final String MESSAGE_SIGNOUT = "You have been signed out.";
 
@@ -24,9 +24,9 @@ public class ContactsActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_contacts);
+    setContentView(R.layout.activity_chats);
     TextView messageText = findViewById(R.id.header);
-    messageText.setText("This is the contacts view (onCreate)");
+    messageText.setText("This is the chats view (onCreate)");
   }
 
 
