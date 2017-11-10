@@ -24,10 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import java.util.Map;
+import java.util.Date;
 
-import edu.njit.cs656.chapapplication.model.ChatMessage;
-import edu.njit.cs656.chapapplication.model.Conversation;
 import edu.njit.cs656.chapapplication.model.Message;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,8 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String MESSGE_SIGNIN_SUCCESSFUL = "Successfully signed in. Welcome!";
     private static final String MESSAGE_SIGNOUT = "You have been signed out.";
 
-    private FirebaseListAdapter<ChatMessage> adapter;
-    private FirebaseListAdapter<Conversation> adapter2;
+    private FirebaseListAdapter<Message> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,15 +62,21 @@ public class MainActivity extends AppCompatActivity {
                 EditText input = findViewById(R.id.input);
 
                 // Read the input field and push a new instance
-                // of ChatMessage to the Firebase database
+                // of Message to the Firebase database
                 FirebaseDatabase.getInstance()
                         .getReference()
-                        .child("chatMessage")
+                    .child("message")
+                    .child("c000001")
                         .push()
-                        .setValue(new ChatMessage(input.getText().toString(),
-                                FirebaseAuth.getInstance()
-                                        .getCurrentUser()
-                                        .getDisplayName())
+                    .setValue(new Message(FirebaseAuth.getInstance()
+                            .getCurrentUser()
+                            .getDisplayName(),
+                            FirebaseAuth.getInstance()
+                                .getCurrentUser()
+                                .getUid(),
+                            input.getText().toString(),
+                            (new Date()).getTime()
+                        )
                         );
                 // Clear the input
                 input.setText("");
@@ -83,83 +86,49 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayChatMessages() {
         loadConversations();
-        //loadConversationsGood();
-    }
-
-    private void loadConversationsGood() {
-        ListView listOfMessages = findViewById(R.id.list_of_messages);
-
-
-
-        FirebaseListOptions.Builder<ChatMessage> builder = new FirebaseListOptions.Builder<>();
-        builder.setLayout(R.layout.message);
-        Query query = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("chatMessage")
-                .limitToLast(50);
-        builder.setQuery(query, ChatMessage.class);
-        builder.setLifecycleOwner(this);
-
-
-
-        FirebaseListOptions<ChatMessage> options = builder.build();
-        Log.d(this.getClass().getSimpleName(), "JPM2");
-        Log.d(this.getClass().getSimpleName(), query.toString());
-        Log.d(this.getClass().getSimpleName(), options.toString());
-
-
-        adapter = new FirebaseListAdapter<ChatMessage>(options) {
-            @Override
-            protected void populateView(View v, ChatMessage model, int position) {
-                // Get references to the views of message.xml
-                TextView messageText = v.findViewById(R.id.message_text);
-                TextView messageUser = v.findViewById(R.id.message_user);
-                TextView messageTime = v.findViewById(R.id.message_time);
-
-                // Set their text
-                messageText.setText(model.getMessageText());
-                messageUser.setText(model.getMessageUser());
-
-                // Format the date before showing it
-                messageTime.setText(DateFormat.format("MM-dd-yyyy (hh:mm:ss aa)",
-                        model.getMessageTime()));
-            }
-        };
-        listOfMessages.setAdapter(adapter);
     }
 
     private void loadConversations() {
         ListView listOfMessages = findViewById(R.id.list_of_messages);
 
-        FirebaseListOptions.Builder<Conversation> builder = new FirebaseListOptions.Builder<>();
+        FirebaseListOptions.Builder<Message> builder = new FirebaseListOptions.Builder<>();
         builder.setLayout(R.layout.message);
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
-                .child("conversation")
-                .limitToLast(50);
-        builder.setQuery(query, Conversation.class);
+            .child("messages")
+            .child("c000001");
+        builder.setQuery(query, Message.class);
         builder.setLifecycleOwner(this);
 
 
-        FirebaseListOptions<Conversation> options = builder.build();
+        FirebaseListOptions<Message> options = builder.build();
         Log.d(this.getClass().getSimpleName(), "JPM2");
         Log.d(this.getClass().getSimpleName(), query.toString());
         Log.d(this.getClass().getSimpleName(), options.toString());
 
 
-        adapter2 = new FirebaseListAdapter<Conversation>(options) {
+        adapter = new FirebaseListAdapter<Message>(options) {
             @Override
-            protected void populateView(View v, Conversation model, int position) {
-                Log.d(this.getClass().getSimpleName(), "position: " + position);
-                for (Map.Entry<String, Message> entry : model.getMessages().entrySet()) {
-                    String key = entry.getKey();
-                    Message value = entry.getValue();
-                    Log.d(this.getClass().getSimpleName(), "key: " + key);
-                    Log.d(this.getClass().getSimpleName(), "value: " + value.toString());
-                }
+            protected void populateView(View view, Message model, int position) {
+                Log.d(this.getClass().getSimpleName(), "model: " + model.toString());
+
+                // Get references to the views of message.xml
+                TextView messageText = view.findViewById(R.id.message_text);
+                TextView messageUser = view.findViewById(R.id.message_user);
+                TextView messageTime = view.findViewById(R.id.message_time);
+
+                // Set their text
+                messageText.setText(model.getMessage());
+                messageUser.setText(model.getFromDisplay());
+
+                // Format the date before showing it
+                messageTime.setText(DateFormat.format("MM-dd-yyyy (hh:mm:ss aa)",
+                    model.getTime()));
+
+
             }
         };
-        listOfMessages.setAdapter(adapter2);
+        listOfMessages.setAdapter(adapter);
 
     }
 
