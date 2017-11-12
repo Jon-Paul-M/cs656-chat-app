@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseDatabase.getInstance()
             .getReference()
-            .child("message")
+            .child("messages")
             .child(currentChatId)
             .push()
             .setValue(new Message(FirebaseAuth.getInstance()

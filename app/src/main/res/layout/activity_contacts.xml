@@ -7,27 +7,21 @@
     tools:context="edu.njit.cs656.chapapplication.activity.ContactsActivity">
 
     <TextView
-        android:id="@+id/header"
+        android:id="@+id/contacts_header"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/message_time"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5sp"
         android:text="This is the contacts view"
         android:textSize="40sp"
-        android:textStyle="normal|bold">
+        android:textStyle="normal|bold" />
 
-    </TextView>
-    <!--
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_above="@id/fab"
-            android:dividerHeight="16dp"
-            android:divider="@android:color/transparent"
-            android:id="@+id/list_of_contacts"
-            android:layout_marginBottom="16dp"/>
-    -->
+    <ListView
+        android:id="@+id/list_of_contacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contacts_header"
+        android:divider="@color/colorPrimaryDark"
+        android:dividerHeight="1sp" />
+
 </RelativeLayout>
