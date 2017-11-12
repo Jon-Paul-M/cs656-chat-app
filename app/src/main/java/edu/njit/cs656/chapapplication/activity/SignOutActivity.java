@@ -16,11 +16,13 @@ public class SignOutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signout);
 
+
         loginButton = findViewById(R.id.signinBttn);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MainActivity.yourChatRoom.setChatRoomName("");
                 startActivity(new Intent(SignOutActivity.this, MainActivity.class));
             }
         });

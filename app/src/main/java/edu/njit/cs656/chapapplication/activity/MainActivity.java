@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setMessage("Loading...");
         progressDialog.show();
 
-        String url = "https://chapapplication-ed1cd.firebaseio.com/messages.json";
+        String url = "https://chapapplication-ed1cd.firebaseio.com/chatrooms.json";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -113,13 +113,15 @@ public class MainActivity extends AppCompatActivity {
             Iterator i = obj.keys();
             String key = "";
 
-            while (i.hasNext()) {
-                key = i.next().toString();
+            if (myArrayList.size() == 0) {
+                while (i.hasNext()) {
+                    key = i.next().toString();
 
-                if (!key.equals(ChatRoomDetails.chatRoomName)) {
-                    myArrayList.add(key);
+                    if (!key.equals(ChatRoomDetails.chatRoomName)) {
+                        myArrayList.add(key);
+                    }
+                    totalChatRoom++;
                 }
-                totalChatRoom++;
             }
 
             if (totalChatRoom <= 1) {
