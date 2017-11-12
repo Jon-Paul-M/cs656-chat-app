@@ -48,24 +48,12 @@ public class OptionsMenuHelper {
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             activity.startActivity(intent);
         } else if (item.getItemId() == R.id.menu_sign_out) {
-            /*
-            AuthUI.getInstance().signOut(activity)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(activity, MESSAGE_SIGNOUT, Toast.LENGTH_LONG).show();
-                            activity.finish();
-                        }
-                    });
-                    */
-
             Intent intent = new Intent(activity, SignOutActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             activity.startActivity(intent);
 
             AuthUI.getInstance().signOut(activity);
             Toast.makeText(activity, MESSAGE_SIGNOUT, Toast.LENGTH_LONG).show();
-
         }
         return true;
     }

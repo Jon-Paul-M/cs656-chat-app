@@ -37,6 +37,9 @@ public class ChatsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chats);
 
+        if (MainActivity.yourChatRoom.getChatRoomName().length() <= 1)
+            MainActivity.yourChatRoom.setChatRoomName("General");
+
         displayChatMessages();  // display the list of messages
 
         // Input message area.
@@ -47,7 +50,7 @@ public class ChatsActivity extends AppCompatActivity {
                 EditText input = findViewById(R.id.input);
 
                 // Get the message text and push it to FirebaseDatabase
-                FirebaseDatabase.getInstance().getReference().child("messages").child(MainActivity.yourChatRoom.chatRoomName)
+                FirebaseDatabase.getInstance().getReference().child("chatrooms").child(MainActivity.yourChatRoom.getChatRoomName())
                         .push()
                         .setValue(new MessageDetails(FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
                                 FirebaseAuth.getInstance().getCurrentUser().getUid(),
@@ -66,7 +69,7 @@ public class ChatsActivity extends AppCompatActivity {
 
         FirebaseListOptions.Builder<MessageDetails> builder = new FirebaseListOptions.Builder<>();
         builder.setLayout(R.layout.message);
-        Query query = FirebaseDatabase.getInstance().getReference().child("messages").child(MainActivity.yourChatRoom.chatRoomName);
+        Query query = FirebaseDatabase.getInstance().getReference().child("chatrooms").child(MainActivity.yourChatRoom.getChatRoomName());
         builder.setQuery(query, MessageDetails.class);
         builder.setLifecycleOwner(this);
 
@@ -86,8 +89,8 @@ public class ChatsActivity extends AppCompatActivity {
 
                 messageText.setText(model.getMessage());
                 messageUser.setText(model.getFromDisplay());
-
-                messageTime.setText(DateFormat.format("MM-dd-yyyy (hh:mm:ss aa)", model.getTime()));
+                if (model.getTime() != null)
+                    messageTime.setText(DateFormat.format("MM-dd-yyyy (hh:mm:ss aa)", model.getTime()));
             }
         };
         listOfMessages.setAdapter(adapter);
