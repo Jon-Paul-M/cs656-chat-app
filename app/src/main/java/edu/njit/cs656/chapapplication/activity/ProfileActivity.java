@@ -1,55 +1,67 @@
 package edu.njit.cs656.chapapplication.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserInfo;
+import com.squareup.picasso.Picasso;
+
 
 import edu.njit.cs656.chapapplication.R;
-import edu.njit.cs656.chapapplication.model.Message;
+import edu.njit.cs656.chapapplication.model.ContactDetails;
+import edu.njit.cs656.chapapplication.model.MessageDetails;
 import edu.njit.cs656.chapapplication.tools.OptionsMenuHelper;
 
 public class ProfileActivity extends AppCompatActivity {
+    private FirebaseListAdapter<MessageDetails> adapter;
 
-  private static final String MESSAGE_SIGNOUT = "You have been signed out.";
+    private ImageView profilePic;
+    private TextView textName;
+    private TextView textEmail;
 
-  private String currentChatId = "c000001";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile);
 
-  private FirebaseListAdapter<Message> adapter;
+        UserInfo user = FirebaseAuth.getInstance().getCurrentUser();
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_profile);
-    TextView messageText = findViewById(R.id.profile_header);
-    messageText.setText("This is the profile view (onCreate)");
-    UserInfo user = FirebaseAuth.getInstance().getCurrentUser();
-    ((TextView) findViewById(R.id.profile_id)).setText(user.getUid());
-    ((TextView) findViewById(R.id.profile_email)).setText(user.getEmail());
-    ((TextView) findViewById(R.id.profile_displayname)).setText(user.getDisplayName());
-    ((TextView) findViewById(R.id.profile_photo)).setText(user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : "");
 
-  }
+        profilePic = (ImageView) findViewById(R.id.profile_picture);
+        textName = (TextView) findViewById(R.id.profile_name);
+        textEmail = (TextView) findViewById(R.id.profile_email);
 
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-  }
+        textName.setText(user.getDisplayName());
+        textEmail.setText(user.getEmail());
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    return OptionsMenuHelper.createMenu(this, menu);
-  }
+        Uri photoURI = user.getPhotoUrl();
+        Picasso.with(this).load(photoURI).into(profilePic);
+        Log.d(this.getClass().getSimpleName(), "THIS IS THE URI:  " + photoURI.toString());
+    }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    return OptionsMenuHelper.itemSelected(this, item);
-  }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return OptionsMenuHelper.createMenu(this, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return OptionsMenuHelper.itemSelected(this, item);
+    }
 
 }

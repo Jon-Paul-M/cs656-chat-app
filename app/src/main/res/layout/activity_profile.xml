@@ -6,52 +6,36 @@
     android:layout_height="match_parent"
     tools:context="edu.njit.cs656.chapapplication.activity.ProfileActivity">
 
+    <ImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_weight="1"
+        android:paddingTop="20dp"
+        android:paddingBottom="25dp"
+        android:paddingRight="25dp"
+        android:paddingLeft="25dp"
+        android:layout_centerHorizontal="true" />
+
     <TextView
-        android:id="@+id/profile_header"
+        android:id="@+id/profile_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This is the profile view"
-        android:textSize="40sp"
-        android:textStyle="normal|bold"
-        android:visibility="visible">
-
-    </TextView>
-
-    <TextView
-        android:id="@+id/profile_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_header"
-        android:text="This is the profile_id"
+        android:layout_below="@+id/profile_picture"
         android:textSize="25sp"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:paddingBottom="20dp"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/profile_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_id"
-        android:text="This is the profile_email"
+        android:layout_below="@+id/profile_name"
         android:textSize="25sp"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:id="@+id/profile_displayname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_email"
-        android:text="This is the profile_displayname"
-        android:textSize="25sp"
-        android:visibility="visible" />
-
-    <TextView
-        android:id="@+id/profile_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_displayname"
-        android:text="This is the profile_photo"
-        android:textSize="25sp"
-        android:visibility="visible" />
 
     <!--
     <TextView
@@ -67,6 +51,5 @@
         android:id="@+id/profile_createdate"
         />
         -->
-
 
 </RelativeLayout>
