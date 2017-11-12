@@ -44,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String MESSAGE_SIGNIN_ERROR = "We couldn't sign you in. Please try again later.";
     private static final String MESSAGE_SIGNIN_SUCCESSFUL = "Successfully signed in. Welcome!";
 
-    static ChatRoomDetails yourChatRoom = new ChatRoomDetails();
+    public static ChatRoomDetails yourChatRoom = new ChatRoomDetails();
     ListView chatRoomList;
     TextView noChatRoom;
-    int totalUsers = 0;
-    ArrayList<String> myArrayList = new ArrayList<>();
+    public static int totalChatRoom = 0;
+    public static ArrayList<String> myArrayList = new ArrayList<>();
     ProgressDialog progressDialog;
 
     private FirebaseListAdapter<MessageDetails> adapter;
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             // Start sign in/sign up activity
             startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().build(), SIGN_IN_REQUEST_CODE);
@@ -68,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Display a list of chat rooms
+     */
     private void displayAllChatRooms() {
         chatRoomList = findViewById(R.id.chatRoomList);
         noChatRoom = findViewById(R.id.noChatRoomText);
@@ -115,23 +119,22 @@ public class MainActivity extends AppCompatActivity {
                 if (!key.equals(ChatRoomDetails.chatRoomName)) {
                     myArrayList.add(key);
                 }
-                totalUsers++;
+                totalChatRoom++;
             }
 
+            if (totalChatRoom <= 1) {
+                noChatRoom.setVisibility(View.VISIBLE);
+                chatRoomList.setVisibility(View.GONE);
+            } else {
+                noChatRoom.setVisibility(View.GONE);
+                chatRoomList.setVisibility(View.VISIBLE);
+                chatRoomList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, myArrayList));
+            }
+
+            progressDialog.dismiss();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        if (totalUsers <= 1) {
-            noChatRoom.setVisibility(View.VISIBLE);
-            chatRoomList.setVisibility(View.GONE);
-        } else {
-            noChatRoom.setVisibility(View.GONE);
-            chatRoomList.setVisibility(View.VISIBLE);
-            chatRoomList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, myArrayList));
-        }
-
-        progressDialog.dismiss();
     }
 
     @Override

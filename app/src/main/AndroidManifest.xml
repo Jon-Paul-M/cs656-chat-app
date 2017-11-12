@@ -12,13 +12,13 @@
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".activity.ContactsActivity" />
         <activity android:name=".activity.ChatsActivity" />
         <activity android:name=".activity.ProfileActivity" />
+        <activity android:name=".activity.SignOutActivity" />
     </application>
 
 </manifest>
