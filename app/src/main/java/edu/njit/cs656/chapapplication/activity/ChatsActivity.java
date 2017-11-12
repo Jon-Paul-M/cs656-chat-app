@@ -25,6 +25,9 @@ import edu.njit.cs656.chapapplication.R;
 import edu.njit.cs656.chapapplication.model.MessageDetails;
 import edu.njit.cs656.chapapplication.tools.OptionsMenuHelper;
 
+/**
+ * Chat inside a chat room
+ */
 public class ChatsActivity extends AppCompatActivity {
 
     private FirebaseListAdapter<MessageDetails> adapter;
@@ -34,15 +37,16 @@ public class ChatsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chats);
 
-        displayChatMessages();
+        displayChatMessages();  // display the list of messages
 
-        // Input message area. GOOD
-        FloatingActionButton fab = findViewById(R.id.fab);
+        // Input message area.
+        FloatingActionButton fab = findViewById(R.id.fab);  // SEND button
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EditText input = findViewById(R.id.input);
 
+                // Get the message text and push it to FirebaseDatabase
                 FirebaseDatabase.getInstance().getReference().child("messages").child(MainActivity.yourChatRoom.chatRoomName)
                         .push()
                         .setValue(new MessageDetails(FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
@@ -96,7 +100,6 @@ public class ChatsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         return OptionsMenuHelper.createMenu(this, menu);
     }
 
