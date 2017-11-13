@@ -32,6 +32,8 @@ import edu.njit.cs656.chapapplication.tools.StringUtils;
 public class ChatsActivity extends AppCompatActivity {
 
   public static final String DB_NAME_MESSAGES = "messages";
+  public static final String DB_ORDER_BY_FIELD = "time";
+  public static final int DB_QUERY_LIMIT = 50;
   private FirebaseListAdapter<Message> adapter;
   private String currentChatRoomId = "General";
 
@@ -78,7 +80,13 @@ public class ChatsActivity extends AppCompatActivity {
 
     FirebaseListOptions.Builder<Message> builder = new FirebaseListOptions.Builder<>();
     builder.setLayout(R.layout.message);
-    Query query = FirebaseDatabase.getInstance().getReference().child(DB_NAME_MESSAGES).child(currentChatRoomId);
+    Query query = FirebaseDatabase
+        .getInstance()
+        .getReference()
+        .child(DB_NAME_MESSAGES)
+        .child(currentChatRoomId)
+        .orderByChild(DB_ORDER_BY_FIELD)
+        .limitToLast(DB_QUERY_LIMIT);
     builder.setQuery(query, Message.class);
     builder.setLifecycleOwner(this);
 
