@@ -1,30 +1,29 @@
 package edu.njit.cs656.chapapplication.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import edu.njit.cs656.chapapplication.R;
 
 public class SignOutActivity extends AppCompatActivity {
-    Button loginButton;
+  Button loginButton;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signout);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_signout);
 
 
-        loginButton = findViewById(R.id.signinBttn);
+    loginButton = findViewById(R.id.signinBttn);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.yourChatRoom.setChatRoomName("");
-                startActivity(new Intent(SignOutActivity.this, MainActivity.class));
-            }
-        });
-    }
+    loginButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        startActivity(new Intent(SignOutActivity.this, MainActivity.class));
+      }
+    });
+  }
 }

@@ -4,13 +4,13 @@ package edu.njit.cs656.chapapplication.model;
  * Created by jon-paul on 11/11/17.
  */
 
-public class ContactDetails {
+public class Contact {
 
     private String id;
     private String display;
     private Long timeAdded;
 
-    public ContactDetails() {
+    public Contact() {
         super();
     }
 

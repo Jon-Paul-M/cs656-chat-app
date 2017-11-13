@@ -4,18 +4,18 @@ package edu.njit.cs656.chapapplication.model;
  * Created by jon-paul on 11/5/17.
  */
 
-public class MessageDetails {
+public class Message {
 
     private String fromDisplay;
     private String fromId;
     private String message;
     private Long time;
 
-    public MessageDetails() {
+    public Message() {
         super();
     }
 
-    public MessageDetails(String fromDisplay, String fromId, String message, Long time) {
+    public Message(String fromDisplay, String fromId, String message, Long time) {
         this.fromDisplay = fromDisplay;
         this.fromId = fromId;
         this.message = message;

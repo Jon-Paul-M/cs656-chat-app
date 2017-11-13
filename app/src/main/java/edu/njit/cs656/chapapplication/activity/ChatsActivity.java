@@ -22,93 +22,109 @@ import com.google.firebase.database.Query;
 import java.util.Date;
 
 import edu.njit.cs656.chapapplication.R;
-import edu.njit.cs656.chapapplication.model.MessageDetails;
+import edu.njit.cs656.chapapplication.model.Message;
 import edu.njit.cs656.chapapplication.tools.OptionsMenuHelper;
+import edu.njit.cs656.chapapplication.tools.StringUtils;
 
 /**
  * Chat inside a chat room
  */
 public class ChatsActivity extends AppCompatActivity {
 
-    private FirebaseListAdapter<MessageDetails> adapter;
+  public static final String DB_NAME_MESSAGES = "messages";
+  private FirebaseListAdapter<Message> adapter;
+  private String currentChatRoomId = "General";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chats);
 
-        if (MainActivity.yourChatRoom.getChatRoomName().length() <= 1)
-            MainActivity.yourChatRoom.setChatRoomName("General");
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_chats);
+    extractChatRoomIdFromIntent();
+    displayChatMessages();
+    buildSendButton();
+  }
 
-        displayChatMessages();  // display the list of messages
-
-        // Input message area.
-        FloatingActionButton fab = findViewById(R.id.fab);  // SEND button
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditText input = findViewById(R.id.input);
-
-                // Get the message text and push it to FirebaseDatabase
-                FirebaseDatabase.getInstance().getReference().child("chatrooms").child(MainActivity.yourChatRoom.getChatRoomName())
-                        .push()
-                        .setValue(new MessageDetails(FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
-                                FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                                input.getText().toString(),
-                                (new Date()).getTime()));
-                input.setText("");
-            }
-        });
+  @Override
+  protected void onResume() {
+    super.onResume();
+    String intentChatRoomId = getIntent().getStringExtra("chatRoomId");
+    if (StringUtils.isNotEmpty(intentChatRoomId)
+        && !intentChatRoomId.equals(currentChatRoomId)) {
+      currentChatRoomId = intentChatRoomId;
+      displayChatMessages();
     }
+  }
 
-    /**
-     * Display all chat messages in a particular chat room
-     */
-    private void displayChatMessages() {
-        ListView listOfMessages = findViewById(R.id.list_of_messages);
+  @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    setIntent(intent);
+  }
 
-        FirebaseListOptions.Builder<MessageDetails> builder = new FirebaseListOptions.Builder<>();
-        builder.setLayout(R.layout.message);
-        Query query = FirebaseDatabase.getInstance().getReference().child("chatrooms").child(MainActivity.yourChatRoom.getChatRoomName());
-        builder.setQuery(query, MessageDetails.class);
-        builder.setLifecycleOwner(this);
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    return OptionsMenuHelper.createMenu(this, menu);
+  }
 
-        FirebaseListOptions<MessageDetails> options = builder.build();
-        Log.d(this.getClass().getSimpleName(), "JPM2");
-        Log.d(this.getClass().getSimpleName(), query.toString());
-        Log.d(this.getClass().getSimpleName(), options.toString());
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    return OptionsMenuHelper.itemSelected(this, item);
+  }
 
-        adapter = new FirebaseListAdapter<MessageDetails>(options) {
-            @Override
-            protected void populateView(View view, MessageDetails model, int position) {
-                Log.d(this.getClass().getSimpleName(), "model: " + model.toString());
 
-                TextView messageText = view.findViewById(R.id.message_text);
-                TextView messageUser = view.findViewById(R.id.message_user);
-                TextView messageTime = view.findViewById(R.id.message_time);
+  private void displayChatMessages() {
+    ListView listOfMessages = findViewById(R.id.list_of_messages);
 
-                messageText.setText(model.getMessage());
-                messageUser.setText(model.getFromDisplay());
-                if (model.getTime() != null)
-                    messageTime.setText(DateFormat.format("MM-dd-yyyy (hh:mm:ss aa)", model.getTime()));
-            }
-        };
-        listOfMessages.setAdapter(adapter);
+    FirebaseListOptions.Builder<Message> builder = new FirebaseListOptions.Builder<>();
+    builder.setLayout(R.layout.message);
+    Query query = FirebaseDatabase.getInstance().getReference().child(DB_NAME_MESSAGES).child(currentChatRoomId);
+    builder.setQuery(query, Message.class);
+    builder.setLifecycleOwner(this);
+
+    FirebaseListOptions<Message> options = builder.build();
+
+    adapter = new FirebaseListAdapter<Message>(options) {
+      @Override
+      protected void populateView(View view, Message model, int position) {
+        Log.d(this.getClass().getSimpleName(), "model: " + model.toString());
+
+        TextView messageText = view.findViewById(R.id.message_text);
+        TextView messageUser = view.findViewById(R.id.message_user);
+        TextView messageTime = view.findViewById(R.id.message_time);
+
+        messageText.setText(model.getMessage());
+        messageUser.setText(model.getFromDisplay());
+        if (model.getTime() != null)
+          messageTime.setText(DateFormat.format("MM-dd-yyyy (hh:mm:ss aa)", model.getTime()));
+      }
+    };
+    listOfMessages.setAdapter(adapter);
+  }
+
+  private void buildSendButton() {
+    FloatingActionButton fab = findViewById(R.id.fab);  // SEND button
+    fab.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        EditText input = findViewById(R.id.input);
+
+        // Get the message text and push it to FirebaseDatabase
+        FirebaseDatabase.getInstance().getReference().child(DB_NAME_MESSAGES).child(currentChatRoomId)
+            .push()
+            .setValue(new Message(FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                input.getText().toString(),
+                (new Date()).getTime()));
+        input.setText("");
+      }
+    });
+  }
+
+  private void extractChatRoomIdFromIntent() {
+    String intentChatRoomId = getIntent().getStringExtra("chatRoomId");
+    if (StringUtils.isNotEmpty(intentChatRoomId)) {
+      currentChatRoomId = intentChatRoomId;
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return OptionsMenuHelper.createMenu(this, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return OptionsMenuHelper.itemSelected(this, item);
-    }
-
+  }
 }

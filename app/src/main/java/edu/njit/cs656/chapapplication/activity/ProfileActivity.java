@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
@@ -16,14 +15,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserInfo;
 import com.squareup.picasso.Picasso;
 
-
 import edu.njit.cs656.chapapplication.R;
-import edu.njit.cs656.chapapplication.model.ContactDetails;
-import edu.njit.cs656.chapapplication.model.MessageDetails;
+import edu.njit.cs656.chapapplication.model.Message;
 import edu.njit.cs656.chapapplication.tools.OptionsMenuHelper;
 
 public class ProfileActivity extends AppCompatActivity {
-    private FirebaseListAdapter<MessageDetails> adapter;
+    private FirebaseListAdapter<Message> adapter;
 
     private ImageView profilePic;
     private TextView textName;
@@ -37,9 +34,9 @@ public class ProfileActivity extends AppCompatActivity {
         UserInfo user = FirebaseAuth.getInstance().getCurrentUser();
 
 
-        profilePic = (ImageView) findViewById(R.id.profile_picture);
-        textName = (TextView) findViewById(R.id.profile_name);
-        textEmail = (TextView) findViewById(R.id.profile_email);
+        profilePic = findViewById(R.id.profile_picture);
+        textName = findViewById(R.id.profile_name);
+        textEmail = findViewById(R.id.profile_email);
 
         textName.setText(user.getDisplayName());
         textEmail.setText(user.getEmail());

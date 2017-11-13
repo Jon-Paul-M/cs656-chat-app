@@ -17,7 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import edu.njit.cs656.chapapplication.R;
-import edu.njit.cs656.chapapplication.model.ContactDetails;
+import edu.njit.cs656.chapapplication.model.Contact;
 import edu.njit.cs656.chapapplication.tools.OptionsMenuHelper;
 
 public class ContactsActivity extends AppCompatActivity {
@@ -26,7 +26,7 @@ public class ContactsActivity extends AppCompatActivity {
 
   private String currentChatId = "c000001";
 
-    private FirebaseListAdapter<ContactDetails> adapter;
+  private FirebaseListAdapter<Contact> adapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -40,23 +40,23 @@ public class ContactsActivity extends AppCompatActivity {
   private void displayContacts() {
     ListView listOfContacts = findViewById(R.id.list_of_contacts);
 
-      FirebaseListOptions.Builder<ContactDetails> builder = new FirebaseListOptions.Builder<>();
+    FirebaseListOptions.Builder<Contact> builder = new FirebaseListOptions.Builder<>();
     builder.setLayout(R.layout.contact);
     Query query = FirebaseDatabase.getInstance()
         .getReference()
         .child("contactList")
         .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-      builder.setQuery(query, ContactDetails.class);
+    builder.setQuery(query, Contact.class);
     builder.setLifecycleOwner(this);
 
-      FirebaseListOptions<ContactDetails> options = builder.build();
+    FirebaseListOptions<Contact> options = builder.build();
     Log.d(this.getClass().getSimpleName(), "JPM2");
     Log.d(this.getClass().getSimpleName(), query.toString());
     Log.d(this.getClass().getSimpleName(), options.toString());
 
-      adapter = new FirebaseListAdapter<ContactDetails>(options) {
+    adapter = new FirebaseListAdapter<Contact>(options) {
       @Override
-      protected void populateView(View view, ContactDetails model, int position) {
+      protected void populateView(View view, Contact model, int position) {
         Log.d(this.getClass().getSimpleName(), "model: " + model.toString());
 
         TextView contactId = view.findViewById(R.id.contact_id);
