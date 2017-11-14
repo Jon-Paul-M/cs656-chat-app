@@ -3,7 +3,6 @@ package edu.njit.cs656.chapapplication.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,9 +21,9 @@ import edu.njit.cs656.chapapplication.tools.OptionsMenuHelper;
 
 public class ContactsActivity extends AppCompatActivity {
 
-  private static final String MESSAGE_SIGNOUT = "You have been signed out.";
 
-  private String currentChatId = "c000001";
+  public static final String DB_NAME_MESSAGES = "contacts";
+  public static final String DB_ORDER_BY_FIELD = "time";
 
   private FirebaseListAdapter<Contact> adapter;
 
@@ -32,8 +31,6 @@ public class ContactsActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_contacts);
-    TextView messageText = findViewById(R.id.contacts_header);
-    messageText.setText("This is the contacts view (onCreate)");
     displayContacts();
   }
 
@@ -44,27 +41,21 @@ public class ContactsActivity extends AppCompatActivity {
     builder.setLayout(R.layout.contact);
     Query query = FirebaseDatabase.getInstance()
         .getReference()
-        .child("contactList")
-        .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        .child(DB_NAME_MESSAGES)
+        .child(FirebaseAuth
+            .getInstance()
+            .getCurrentUser()
+            .getUid());
     builder.setQuery(query, Contact.class);
     builder.setLifecycleOwner(this);
 
     FirebaseListOptions<Contact> options = builder.build();
-    Log.d(this.getClass().getSimpleName(), "JPM2");
-    Log.d(this.getClass().getSimpleName(), query.toString());
-    Log.d(this.getClass().getSimpleName(), options.toString());
 
     adapter = new FirebaseListAdapter<Contact>(options) {
       @Override
       protected void populateView(View view, Contact model, int position) {
-        Log.d(this.getClass().getSimpleName(), "model: " + model.toString());
-
-        TextView contactId = view.findViewById(R.id.contact_id);
         TextView contactDisplay = view.findViewById(R.id.contact_displayname);
-
-        contactId.setText(model.getId());
         contactDisplay.setText(model.getDisplay());
-
       }
     };
     listOfContacts.setAdapter(adapter);
