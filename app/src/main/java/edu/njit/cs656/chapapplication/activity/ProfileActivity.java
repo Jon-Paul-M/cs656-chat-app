@@ -16,11 +16,11 @@ import com.google.firebase.auth.UserInfo;
 import com.squareup.picasso.Picasso;
 
 import edu.njit.cs656.chapapplication.R;
-import edu.njit.cs656.chapapplication.model.Message;
+import edu.njit.cs656.chapapplication.model.MessageModel;
 import edu.njit.cs656.chapapplication.tools.OptionsMenuHelper;
 
 public class ProfileActivity extends AppCompatActivity {
-    private FirebaseListAdapter<Message> adapter;
+    private FirebaseListAdapter<MessageModel> adapter;
 
     private ImageView profilePic;
     private TextView textName;
