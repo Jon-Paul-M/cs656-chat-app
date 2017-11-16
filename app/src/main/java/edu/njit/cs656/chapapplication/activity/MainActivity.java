@@ -162,19 +162,10 @@ public class MainActivity extends AppCompatActivity {
         final TextView wrong_password = (TextView) dialog.findViewById(R.id.wrong_password_text);
         final EditText user_password = (EditText) dialog.findViewById(R.id.user_password);
         Button submitBttn = (Button) dialog.findViewById(R.id.submit_bttn);
-        Button cancelBttn = (Button) dialog.findViewById(R.id.cancel_bttn);
 
         wrong_password.setText("");
         dialog.show();
-
-        // attach a listener on the cancel button
-        cancelBttn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
+        
         final HashMap tmpRoom = aChatRoom;
         final String chatId = chatRoomId;
 
