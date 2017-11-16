@@ -1,24 +1,28 @@
 package edu.njit.cs656.chapapplication.model;
 
+import android.os.Message;
+
 /**
  * Created by jon-paul on 11/5/17.
  */
 
-public class Message {
+public class MessageModel {
 
     private String fromDisplay;
     private String fromId;
     private String message;
+    private String type;
     private Long time;
 
-    public Message() {
+    public MessageModel() {
         super();
     }
 
-    public Message(String fromDisplay, String fromId, String message, Long time) {
+    public MessageModel(String fromDisplay, String fromId, String message, String type, Long time) {
         this.fromDisplay = fromDisplay;
         this.fromId = fromId;
         this.message = message;
+        this.type = type;
         this.time = time;
     }
 
@@ -38,7 +42,6 @@ public class Message {
         this.fromId = fromId;
     }
 
-
     public Long getTime() {
         return time;
     }
@@ -55,7 +58,9 @@ public class Message {
         this.message = message;
     }
 
+    public String getType() {return type; }
 
+    public void setType(String type) { this.type = type; }
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Message{");
