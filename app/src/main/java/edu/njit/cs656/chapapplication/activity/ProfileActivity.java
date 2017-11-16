@@ -42,8 +42,13 @@ public class ProfileActivity extends AppCompatActivity {
         textEmail.setText(user.getEmail());
 
         Uri photoURI = user.getPhotoUrl();
-        Picasso.with(this).load(photoURI).into(profilePic);
-        Log.d(this.getClass().getSimpleName(), "THIS IS THE URI:  " + photoURI.toString());
+        if(photoURI != null) {
+            Picasso.with(this).load(photoURI).into(profilePic);
+        }
+        else {
+            Picasso.with(this).load(R.drawable.default_avatar).into(profilePic);
+        }
+        //Log.d(this.getClass().getSimpleName(), "THIS IS THE URI:  " + photoURI.toString());
     }
 
     @Override
