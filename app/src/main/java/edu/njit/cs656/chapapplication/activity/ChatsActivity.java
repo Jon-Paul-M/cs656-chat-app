@@ -44,6 +44,11 @@ import edu.njit.cs656.chapapplication.tools.OptionsMenuHelper;
 import edu.njit.cs656.chapapplication.tools.StringUtils;
 
 /**
+ *  This class handle the chat activity
+ *  - send/receive text message
+ *  - send/receive images from Camera roll or Gallery
+ *  - capture & send images via the camera
+ *
  * Chat inside a chat room
  */
 public class ChatsActivity extends AppCompatActivity {
@@ -53,31 +58,26 @@ public class ChatsActivity extends AppCompatActivity {
     public static final int DB_QUERY_LIMIT = 50;
 
     public static String currentChatRoomId = "General";
+    private static final int GALLERY_PICK = 1;
 
-    // These 2 helps with the new message layout
+    // These components help displaying a MESSAGE item
     private RecyclerView mMessageList;
     private List<MessageModel> messagesList = new ArrayList<>();
     private LinearLayoutManager mLinearLayout;
     private MessageAdapter mAdapter;
 
-    private FirebaseListAdapter<MessageModel> adapter;
-    private DatabaseReference mMessageDatabase;
-
-    private FirebaseAuth mAuth;
-    private String mCurrentUserId;
     private DatabaseReference mRootRef;
+    private FirebaseAuth mAuth;
+
+    private String mCurrentUserId;
     private String mChatUser;
-
-    private static final int GALLERY_PICK = 1;
-
     private EditText mChatMessageView;
 
     private Button mChatAddBtn;    // the ADD image button
     private Button mChatSendBtn;    // the SEND button
     private ImageView messageImage;     // image viewer
 
-    // Storage Firebase
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private FirebaseStorage storage = FirebaseStorage.getInstance(); // Storage Firebase
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +85,7 @@ public class ChatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         extractChatRoomIdFromIntent();
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         mAdapter = new MessageAdapter(messagesList);
 
@@ -112,8 +113,6 @@ public class ChatsActivity extends AppCompatActivity {
                 sendMessage();
             }
         });
-
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // add image button listner
         mChatAddBtn.setOnClickListener(new View.OnClickListener() {
