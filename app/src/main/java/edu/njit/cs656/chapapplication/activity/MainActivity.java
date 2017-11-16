@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,14 +57,9 @@ public class MainActivity extends AppCompatActivity {
     chatRoomList = findViewById(R.id.chatRoomList);
     noChatRoom = findViewById(R.id.noChatRoomText);
 
-    FirebaseListOptions.Builder<ChatRoom> builder =
-        new FirebaseListOptions.Builder<>();
+      FirebaseListOptions.Builder<ChatRoom> builder = new FirebaseListOptions.Builder<>();
     builder.setLayout(R.layout.chat_room);
-    Query query = FirebaseDatabase.getInstance()
-        .getReference()
-        .child(DB_NAME_CHAT_ROOM)
-        .orderByChild("open")
-        .equalTo(true);
+      Query query = FirebaseDatabase.getInstance().getReference().child(DB_NAME_CHAT_ROOM).orderByChild("open").equalTo(true);
 
     builder.setQuery(query, ChatRoom.class);
     builder.setLifecycleOwner(this);
@@ -73,8 +69,26 @@ public class MainActivity extends AppCompatActivity {
     adapter = new FirebaseListAdapter<ChatRoom>(options) {
       @Override
       protected void populateView(View view, ChatRoom model, int position) {
-        TextView text = view.findViewById(R.id.chat_room_name);
-        text.setText(model.getTitle());
+
+          ImageView img = view.findViewById(R.id.icon);
+          TextView text = view.findViewById(R.id.chat_room_name);
+          text.setText(model.getTitle());
+
+          if (model.getTitle().equalsIgnoreCase("Comedy"))
+              img.setImageResource(R.drawable.room_comedy);
+          else if (model.getTitle().equalsIgnoreCase("Gaming"))
+              img.setImageResource(R.drawable.room_gaming);
+          else if (model.getTitle().equalsIgnoreCase("General"))
+              img.setImageResource(R.drawable.room_general);
+          else if (model.getTitle().equalsIgnoreCase("Music"))
+              img.setImageResource(R.drawable.room_music);
+          else if (model.getTitle().equalsIgnoreCase("Sports"))
+              img.setImageResource(R.drawable.room_sports);
+          else if (model.getTitle().equalsIgnoreCase("Technology"))
+              img.setImageResource(R.drawable.room_tech);
+          else {
+              System.out.println(model.getTitle());
+          }
       }
 
       @Override

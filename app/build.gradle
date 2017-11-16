@@ -19,6 +19,10 @@ android {
         }
     }
     buildToolsVersion '26.0.2'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 }
 
 dependencies {
@@ -34,8 +38,8 @@ dependencies {
     compile 'com.firebaseui:firebase-ui:3.0.0'
     compile 'com.google.android.gms:play-services-basement:11.4.2'
     compile 'com.android.volley:volley:1.0.0'
-    compile 'com.squareup.picasso:picasso:2.5.2' // display image using Google Picasso
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    // display image using Google Picasso
 }
-
 
 apply plugin: 'com.google.gms.google-services'

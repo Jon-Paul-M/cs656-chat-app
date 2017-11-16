@@ -16,11 +16,11 @@ import com.google.firebase.auth.UserInfo;
 import com.squareup.picasso.Picasso;
 
 import edu.njit.cs656.chapapplication.R;
-import edu.njit.cs656.chapapplication.model.Message;
+import edu.njit.cs656.chapapplication.model.MessageModel;
 import edu.njit.cs656.chapapplication.tools.OptionsMenuHelper;
 
 public class ProfileActivity extends AppCompatActivity {
-    private FirebaseListAdapter<Message> adapter;
+    private FirebaseListAdapter<MessageModel> adapter;
 
     private ImageView profilePic;
     private TextView textName;
@@ -42,8 +42,13 @@ public class ProfileActivity extends AppCompatActivity {
         textEmail.setText(user.getEmail());
 
         Uri photoURI = user.getPhotoUrl();
-        Picasso.with(this).load(photoURI).into(profilePic);
-        Log.d(this.getClass().getSimpleName(), "THIS IS THE URI:  " + photoURI.toString());
+        if(photoURI != null) {
+            Picasso.with(this).load(photoURI).into(profilePic);
+        }
+        else {
+            Picasso.with(this).load(R.drawable.default_avatar).into(profilePic);
+        }
+        //Log.d(this.getClass().getSimpleName(), "THIS IS THE URI:  " + photoURI.toString());
     }
 
     @Override

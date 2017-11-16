@@ -7,13 +7,14 @@
     tools:context="edu.njit.cs656.chapapplication.activity.MainActivity">
 
     <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/chatRoomList" />
+        android:id="@+id/chatRoomList"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="6dp"
         android:text="No chat room found."
         android:id="@+id/noChatRoomText"
         android:visibility="gone" />
