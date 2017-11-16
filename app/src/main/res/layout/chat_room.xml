@@ -4,11 +4,36 @@
     android:layout_height="match_parent"
     android:layout_margin="10dp">
 
-    <TextView
-        android:id="@+id/chat_room_name"
+    <LinearLayout
+        android:id="@+id/row"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginRight="5dp"
-        android:textSize="24sp" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip"
+        android:padding="3dip">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/fui_ic_facebook_white_22dp"></ImageView>
+
+        <TextView
+            android:id="@+id/chat_room_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/icon"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="7dp"
+            android:layout_toEndOf="@+id/icon"
+            android:gravity="left"
+            android:paddingLeft="10dp"
+            android:text="CHAT ROOM NAME "
+            android:textSize="25sp" />
+    </LinearLayout>
 
 </RelativeLayout>
