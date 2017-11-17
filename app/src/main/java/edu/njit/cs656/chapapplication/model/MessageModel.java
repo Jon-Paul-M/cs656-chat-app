@@ -1,7 +1,5 @@
 package edu.njit.cs656.chapapplication.model;
 
-import android.os.Message;
-
 /**
  * Created by jon-paul on 11/5/17.
  */
@@ -61,13 +59,15 @@ public class MessageModel {
     public String getType() {return type; }
 
     public void setType(String type) { this.type = type; }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Message{");
         sb.append("fromDisplay='").append(fromDisplay).append('\'');
+        sb.append(", time=").append(time).append('\'');
+        sb.append(", type=").append(type).append('\'');
         sb.append(", fromId='").append(fromId).append('\'');
-        sb.append(", message='").append(message).append('\'');
-        sb.append(", time=").append(time);
+        sb.append(", message='").append(message);
         sb.append('}');
         return sb.toString();
     }

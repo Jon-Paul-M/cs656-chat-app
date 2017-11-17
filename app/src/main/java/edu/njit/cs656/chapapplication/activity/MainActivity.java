@@ -1,9 +1,10 @@
 package edu.njit.cs656.chapapplication.activity;
 
-import android.app.AlertDialog;
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,11 +48,15 @@ public class MainActivity extends AppCompatActivity {
     private TextView noChatRoom;
     private FirebaseListAdapter<ChatRoom> adapter;
 
+    private String[] permissions = {Manifest.permission.RECORD_AUDIO};
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dialog = new Dialog(this);
+        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             // Start sign in/sign up activity
@@ -156,11 +161,11 @@ public class MainActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.chatroom_password_dialog);
 
         // Set the custom dialog components
-        TextView text = (TextView) dialog.findViewById(R.id.text_dialog);
+        TextView text = dialog.findViewById(R.id.text_dialog);
         text.setText("Enter password for " + chatRoomId + " chat room:");
-        final TextView wrong_password = (TextView) dialog.findViewById(R.id.wrong_password_text);
-        final EditText user_password = (EditText) dialog.findViewById(R.id.user_password);
-        Button submitBttn = (Button) dialog.findViewById(R.id.submit_bttn);
+        final TextView wrong_password = dialog.findViewById(R.id.wrong_password_text);
+        final EditText user_password = dialog.findViewById(R.id.user_password);
+        Button submitBttn = dialog.findViewById(R.id.submit_bttn);
 
         wrong_password.setText("");
         dialog.show();

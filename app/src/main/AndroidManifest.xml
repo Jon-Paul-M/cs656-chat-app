@@ -5,20 +5,31 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Chat"
+        android:label="ChatApp"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        android:theme="@style/AppTheme"
+        android:largeHeap="true">
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="CS656 Chat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ContactsActivity" />
-        <activity android:name=".activity.ChatsActivity" />
-        <activity android:name=".activity.ProfileActivity" />
-        <activity android:name=".activity.SignOutActivity" />
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:label="My Profile" />
+        <activity
+            android:name=".activity.ContactsActivity"
+            android:label="Contacts" />
+        <activity
+            android:name=".activity.ChatsActivity"
+            android:label="Chat Room" />
+        <activity
+            android:name=".activity.SignOutActivity"
+            android:label="Sign Out" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -34,4 +45,6 @@
     <uses-feature android:name="android.hardware.camera" android:required="true" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 </manifest>
