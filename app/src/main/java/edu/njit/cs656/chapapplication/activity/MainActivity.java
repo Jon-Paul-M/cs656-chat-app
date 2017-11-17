@@ -155,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
         // Set up the dialog
         dialog.setContentView(R.layout.chatroom_password_dialog);
 
-
         // Set the custom dialog components
         TextView text = (TextView) dialog.findViewById(R.id.text_dialog);
         text.setText("Enter password for " + chatRoomId + " chat room:");
@@ -165,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
         wrong_password.setText("");
         dialog.show();
-        
+
         final HashMap tmpRoom = aChatRoom;
         final String chatId = chatRoomId;
 
