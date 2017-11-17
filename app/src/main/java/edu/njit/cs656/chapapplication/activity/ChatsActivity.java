@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.njit.cs656.chapapplication.R;
-import edu.njit.cs656.chapapplication.model.MessageAdapter;
+import edu.njit.cs656.chapapplication.adapter.MessageAdapter;
 import edu.njit.cs656.chapapplication.model.MessageModel;
 import edu.njit.cs656.chapapplication.tools.OptionsMenuHelper;
 import edu.njit.cs656.chapapplication.tools.StringUtils;
@@ -51,25 +51,19 @@ public class ChatsActivity extends AppCompatActivity {
     public static final String DB_NAME_MESSAGES = "messages";
     public static final String DB_ORDER_BY_FIELD = "time";
     public static final int DB_QUERY_LIMIT = 50;
-
+    private static final int GALLERY_PICK = 1;
     public static String currentChatRoomId = "General";
-
     // These 2 helps with the new message layout
     private RecyclerView mMessageList;
     private List<MessageModel> messagesList = new ArrayList<>();
     private LinearLayoutManager mLinearLayout;
     private MessageAdapter mAdapter;
-
     private FirebaseListAdapter<MessageModel> adapter;
     private DatabaseReference mMessageDatabase;
-
     private FirebaseAuth mAuth;
     private String mCurrentUserId;
     private DatabaseReference mRootRef;
     private String mChatUser;
-
-    private static final int GALLERY_PICK = 1;
-
     private EditText mChatMessageView;
 
     private Button mChatAddBtn;    // the ADD image button
@@ -90,7 +84,7 @@ public class ChatsActivity extends AppCompatActivity {
 
         // help displaying the messages
         mLinearLayout = new LinearLayoutManager(this);
-        mMessageList = (RecyclerView) findViewById(R.id.reyclerview_message_list);
+        mMessageList = findViewById(R.id.reyclerview_message_list);
         mMessageList.setHasFixedSize(true);
         mMessageList.setLayoutManager(mLinearLayout);
         mMessageList.setAdapter(mAdapter);
@@ -99,9 +93,9 @@ public class ChatsActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mCurrentUserId = mAuth.getCurrentUser().getUid();
 
-        mChatAddBtn = (Button) findViewById(R.id.image_bttn);
-        mChatSendBtn = (Button) findViewById(R.id.send_bttn);
-        mChatMessageView = (EditText) findViewById(R.id.chat_message_view);
+        mChatAddBtn = findViewById(R.id.image_bttn);
+        mChatSendBtn = findViewById(R.id.send_bttn);
+        mChatMessageView = findViewById(R.id.chat_message_view);
 
         displayMessages();
 

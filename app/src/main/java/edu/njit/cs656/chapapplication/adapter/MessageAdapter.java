@@ -1,4 +1,4 @@
-package edu.njit.cs656.chapapplication.model;
+package edu.njit.cs656.chapapplication.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import edu.njit.cs656.chapapplication.R;
+import edu.njit.cs656.chapapplication.model.MessageModel;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
 
@@ -29,23 +30,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_single_layout, parent, false);
 
         return new MessageViewHolder(v);
-    }
-
-    public class MessageViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView messageText;
-        public TextView displayName;
-        public TextView messageTime;
-        public ImageView messageImage;
-
-        public MessageViewHolder(View view) {
-            super(view);
-
-            messageText = (TextView) view.findViewById(R.id.message_text_layout);
-            displayName = (TextView) view.findViewById(R.id.name_text_layout);
-            messageTime = (TextView) view.findViewById(R.id.time_text_layout);
-            messageImage = (ImageView) view.findViewById(R.id.message_image_layout);
-        }
     }
 
     @Override
@@ -80,5 +64,22 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @Override
     public int getItemViewType(int position) {
         return position;
+    }
+
+    public class MessageViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView messageText;
+        public TextView displayName;
+        public TextView messageTime;
+        public ImageView messageImage;
+
+        public MessageViewHolder(View view) {
+            super(view);
+
+            messageText = view.findViewById(R.id.message_text_layout);
+            displayName = view.findViewById(R.id.name_text_layout);
+            messageTime = view.findViewById(R.id.time_text_layout);
+            messageImage = view.findViewById(R.id.message_image_layout);
+        }
     }
 }
