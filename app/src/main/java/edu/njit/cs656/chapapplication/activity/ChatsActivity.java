@@ -39,7 +39,7 @@ import java.util.Map;
 
 import edu.njit.cs656.chapapplication.R;
 import edu.njit.cs656.chapapplication.adapter.MessageAdapter;
-import edu.njit.cs656.chapapplication.model.MessageModel;
+import edu.njit.cs656.chapapplication.model.Message;
 import edu.njit.cs656.chapapplication.tools.OptionsMenuHelper;
 import edu.njit.cs656.chapapplication.tools.StringUtils;
 
@@ -55,10 +55,10 @@ public class ChatsActivity extends AppCompatActivity {
     public static String currentChatRoomId = "General";
     // These 2 helps with the new message layout
     private RecyclerView mMessageList;
-    private List<MessageModel> messagesList = new ArrayList<>();
+  private List<Message> messagesList = new ArrayList<>();
     private LinearLayoutManager mLinearLayout;
     private MessageAdapter mAdapter;
-    private FirebaseListAdapter<MessageModel> adapter;
+  private FirebaseListAdapter<Message> adapter;
     private DatabaseReference mMessageDatabase;
     private FirebaseAuth mAuth;
     private String mCurrentUserId;
@@ -258,7 +258,7 @@ public class ChatsActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 // if a new child is detected, store it to the dataSnapshot
                 // get data from dataSnapshot
-                MessageModel message = dataSnapshot.getValue(MessageModel.class);
+              Message message = dataSnapshot.getValue(Message.class);
 
                 messagesList.add(message);  // add the message to the array
                 mAdapter.notifyDataSetChanged();    // notify dataset
@@ -297,7 +297,7 @@ public class ChatsActivity extends AppCompatActivity {
     private void displayChatMessages() {
         listOfMessages = findViewById(R.id.list_of_messages);
 
-        FirebaseListOptions.Builder<MessageModel> builder = new FirebaseListOptions.Builder<>();
+        FirebaseListOptions.Builder<Message> builder = new FirebaseListOptions.Builder<>();
         builder.setLayout(R.layout.message);
         Query query = FirebaseDatabase
                 .getInstance()
@@ -306,14 +306,14 @@ public class ChatsActivity extends AppCompatActivity {
                 .child(currentChatRoomId)
                 .orderByChild(DB_ORDER_BY_FIELD)
                 .limitToLast(DB_QUERY_LIMIT);
-        builder.setQuery(query, MessageModel.class);
+        builder.setQuery(query, Message.class);
         builder.setLifecycleOwner(this);
 
-        FirebaseListOptions<MessageModel> options = builder.build();
+        FirebaseListOptions<Message> options = builder.build();
 
-        adapter = new FirebaseListAdapter<MessageModel>(options) {
+        adapter = new FirebaseListAdapter<Message>(options) {
             @Override
-            protected void populateView(View view, MessageModel model, int position) {
+            protected void populateView(View view, Message model, int position) {
                 Log.d(this.getClass().getSimpleName(), "model: " + model.toString());
 
                 TextView messageText = view.findViewById(R.id.message_text);

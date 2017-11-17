@@ -13,14 +13,14 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import edu.njit.cs656.chapapplication.R;
-import edu.njit.cs656.chapapplication.model.MessageModel;
+import edu.njit.cs656.chapapplication.model.Message;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
 
-    private List<MessageModel> mMessageList; // list that holds the messages
+    private List<Message> mMessageList; // list that holds the messages
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
 
-    public MessageAdapter(List<MessageModel> mMessageList) {
+    public MessageAdapter(List<Message> mMessageList) {
         this.mMessageList = mMessageList;
     }
 
@@ -34,7 +34,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     @Override
     public void onBindViewHolder(final MessageViewHolder viewHolder, int i) {
-        MessageModel aMessage = mMessageList.get(i);
+        Message aMessage = mMessageList.get(i);
         String from_user = aMessage.getFromDisplay();
 
         if(aMessage.getType().equals("image")) {

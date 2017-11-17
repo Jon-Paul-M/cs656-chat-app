@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -16,11 +15,11 @@ import com.google.firebase.auth.UserInfo;
 import com.squareup.picasso.Picasso;
 
 import edu.njit.cs656.chapapplication.R;
-import edu.njit.cs656.chapapplication.model.MessageModel;
+import edu.njit.cs656.chapapplication.model.Message;
 import edu.njit.cs656.chapapplication.tools.OptionsMenuHelper;
 
 public class ProfileActivity extends AppCompatActivity {
-    private FirebaseListAdapter<MessageModel> adapter;
+    private FirebaseListAdapter<Message> adapter;
 
     private ImageView profilePic;
     private TextView textName;
