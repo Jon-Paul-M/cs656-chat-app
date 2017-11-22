@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C:\Users\OWNER\AndroidStudioProjects\cs656-chat-app20171114\ChapApplication.iml" filepath="C:\Users\OWNER\AndroidStudioProjects\cs656-chat-app20171114\ChapApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ChapApplication.iml" filepath="$PROJECT_DIR$/ChapApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cs656-chat-app.iml" filepath="$PROJECT_DIR$/cs656-chat-app.iml" />
-      <module fileurl="file://C:\Users\OWNER\AndroidStudioProjects\cs656-chat-app\cs656-chat-app20171114.iml" filepath="C:\Users\OWNER\AndroidStudioProjects\cs656-chat-app\cs656-chat-app20171114.iml" />
     </modules>
   </component>
 </project>
