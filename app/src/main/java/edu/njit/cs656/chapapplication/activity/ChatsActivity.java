@@ -580,3 +580,4 @@ public class ChatsActivity extends AppCompatActivity {
   }
 
 }
+
