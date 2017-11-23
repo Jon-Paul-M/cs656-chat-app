@@ -38,7 +38,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,6 +47,7 @@ import java.util.Map;
 import edu.njit.cs656.chapapplication.R;
 import edu.njit.cs656.chapapplication.adapter.MessageAdapter;
 import edu.njit.cs656.chapapplication.model.Message;
+import edu.njit.cs656.chapapplication.tools.ConcurrentDateFormater;
 import edu.njit.cs656.chapapplication.tools.OptionsMenuHelper;
 import edu.njit.cs656.chapapplication.tools.StringUtils;
 
@@ -61,13 +61,13 @@ import edu.njit.cs656.chapapplication.tools.StringUtils;
  */
 public class ChatsActivity extends AppCompatActivity {
 
-  public static final String DB_NAME_MESSAGES = "messages";
-  public static final String DB_ORDER_BY_FIELD = "time";
-  public static final int DB_QUERY_LIMIT = 50;
+  private static final String DB_NAME_MESSAGES = "messages";
+  private static final String DB_ORDER_BY_FIELD = "time";
+  private static final int DB_QUERY_LIMIT = 50;
   private static final int GALLERY_PICK = 1;
   private static final int REQUEST_SEND_CAMERA_IMAGE_CODE = 2;
   private static final int REQUEST_RECORD_AUDIO_PERMISSION = 3;
-  private static final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+  private static final ConcurrentDateFormater formater = new ConcurrentDateFormater("MM/dd/yyyy hh:mm a");
 
   public static String currentChatRoomId = "General";
 
@@ -77,24 +77,24 @@ public class ChatsActivity extends AppCompatActivity {
   private LinearLayoutManager linearLayoutManager;
   private MessageAdapter messageAdapter;
 
-  private EditText mChatMessageView;
+  private EditText chatMessageView;
 
-  private Button mChatAddBtn;    // the ADD image button
-  private Button mChatSendBtn;    // the SEND button
+  private Button addImageButton;    // the ADD image button
+  private Button sendMessageButton;    // the SEND button
 
   private Dialog mediaDialog;
-  private Button galleryBttn;
-  private Button cameraBttn;
-  private Button voiceBttn;
-  private Uri photoURI;
+  private Button galleryButton;
+  private Button cameraButton;
+  private Button voiceButton;
+  private Uri photoUri;
 
   // RECORDING dialog
   private Dialog audioDialog;
-  private Button audioRecordBttn;
-  private Button audioStopBttn;
-  private Button playbackStartBttn;
-  private Button playbackStopBttn;
-  private Button sendAudioBttn;
+  private Button audioRecordButton;
+  private Button audioStopButton;
+  private Button playbackStartButton;
+  private Button playbackStopButton;
+  private Button sendAudioButton;
   private MediaPlayer mediaPlayer;
   private MediaRecorder mediaRecorder;
   private File audioFile;
@@ -110,7 +110,6 @@ public class ChatsActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_chat);
-
     extractChatRoomIdFromIntent();
     displayMessages();
     setupSendMessageButton();
@@ -119,7 +118,7 @@ public class ChatsActivity extends AppCompatActivity {
 
   private void setupMediaSelectButton() {
     // Media button listner
-    mChatAddBtn.setOnClickListener(new View.OnClickListener() {
+    addImageButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         startMediaSelection();
@@ -129,7 +128,7 @@ public class ChatsActivity extends AppCompatActivity {
 
   private void setupSendMessageButton() {
     // send message
-    mChatSendBtn.setOnClickListener(new View.OnClickListener() {
+    sendMessageButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         sendTextMessage();
@@ -142,7 +141,6 @@ public class ChatsActivity extends AppCompatActivity {
     super.onResume();
     String intentChatRoomId = getIntent().getStringExtra("chatRoomId");
     if (StringUtils.isNotEmpty(intentChatRoomId) && !intentChatRoomId.equals(currentChatRoomId)) {
-
       currentChatRoomId = intentChatRoomId;
       displayMessages();
     }
@@ -161,7 +159,7 @@ public class ChatsActivity extends AppCompatActivity {
     if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {    // Sending image from gallery
       uri = data.getData();
     } else if (requestCode == REQUEST_SEND_CAMERA_IMAGE_CODE && resultCode == RESULT_OK) {
-      uri = photoURI;
+      uri = photoUri;
     }
     if (uri != null) {
       sendMediaMessage(uri, "image");
@@ -199,14 +197,14 @@ public class ChatsActivity extends AppCompatActivity {
     // Set up the dialog
     mediaDialog = new Dialog(ChatsActivity.this);
     mediaDialog.setContentView(R.layout.media_selection);
-    galleryBttn = mediaDialog.findViewById(R.id.img_gallery_bttn);
-    cameraBttn = mediaDialog.findViewById(R.id.img_camera_bttn);
-    voiceBttn = mediaDialog.findViewById(R.id.voice_bttn);
+    galleryButton = mediaDialog.findViewById(R.id.img_gallery_bttn);
+    cameraButton = mediaDialog.findViewById(R.id.img_camera_bttn);
+    voiceButton = mediaDialog.findViewById(R.id.voice_bttn);
 
     mediaDialog.show();    // display pop up
 
     // Send images from gallery
-    galleryBttn.setOnClickListener(new View.OnClickListener() {
+    galleryButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         Intent galleryIntent = new Intent();
@@ -219,7 +217,7 @@ public class ChatsActivity extends AppCompatActivity {
     });
 
     // capture a picture and then send it
-    cameraBttn.setOnClickListener(new View.OnClickListener() {
+    cameraButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         dispatchTakePictureIntent();
@@ -228,7 +226,7 @@ public class ChatsActivity extends AppCompatActivity {
     });
 
     // Record voice and then send it
-    voiceBttn.setOnClickListener(new View.OnClickListener() {
+    voiceButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         ActivityCompat.requestPermissions(ChatsActivity.this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
@@ -243,7 +241,7 @@ public class ChatsActivity extends AppCompatActivity {
    * Send text message
    */
   private void sendTextMessage() {
-    String message = mChatMessageView.getText().toString(); // get the message from the input area
+    String message = chatMessageView.getText().toString(); // get the message from the input area
 
     if (StringUtils.isNotEmpty(message)) {
       String currentChatReference = DB_NAME_MESSAGES + "/" + currentChatRoomId;
@@ -261,7 +259,7 @@ public class ChatsActivity extends AppCompatActivity {
       Map messageUserMap = new HashMap();
       messageUserMap.put(currentChatReference + "/" + pushId, messageMap);
 
-      mChatMessageView.setText("");
+      chatMessageView.setText("");
 
       // Scroll down to the new message
       messageListView.smoothScrollToPosition(messageAdapter.getItemCount());
@@ -317,7 +315,7 @@ public class ChatsActivity extends AppCompatActivity {
           messageMap.put("fromId", FirebaseAuth.getInstance().getCurrentUser().getUid());
           messageMap.put("type", type);
 
-          mChatMessageView.setText("");
+          chatMessageView.setText("");
 
           String currentChatRef = DB_NAME_MESSAGES + "/" + currentChatRoomId;
           DatabaseReference userMessagePush = FirebaseDatabase.getInstance().getReference().child(DB_NAME_MESSAGES).child(currentChatRoomId).push();
@@ -326,7 +324,7 @@ public class ChatsActivity extends AppCompatActivity {
           Map messageUserMap = new HashMap();
           messageUserMap.put(currentChatRef + "/" + pushId, messageMap);
 
-          mChatMessageView.setText("");
+          chatMessageView.setText("");
 
           messageListView.smoothScrollToPosition(messageAdapter.getItemCount());
           linearLayoutManager.setStackFromEnd(true);
@@ -364,9 +362,9 @@ public class ChatsActivity extends AppCompatActivity {
     messageListView.setAdapter(messageAdapter);
 
 
-    mChatAddBtn = findViewById(R.id.image_bttn);
-    mChatSendBtn = findViewById(R.id.send_bttn);
-    mChatMessageView = findViewById(R.id.chat_message_view);
+    addImageButton = findViewById(R.id.image_bttn);
+    sendMessageButton = findViewById(R.id.send_bttn);
+    chatMessageView = findViewById(R.id.chat_message_view);
 
     FirebaseDatabase.getInstance().getReference()
         .child(DB_NAME_MESSAGES)
@@ -411,7 +409,7 @@ public class ChatsActivity extends AppCompatActivity {
    */
   private void dispatchTakePictureIntent() {
     // Create an empty image file
-    String timeStamp = sdf.format(new Date());
+    String timeStamp = formater.format(new Date());
     String imageFileName = "JPEG_" + timeStamp;
     File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
     try {
@@ -427,9 +425,9 @@ public class ChatsActivity extends AppCompatActivity {
 
         // continue if the file was successfully created
         if (photoFile != null) {
-          photoURI = Uri.fromFile(photoFile);
+          photoUri = Uri.fromFile(photoFile);
           Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);    // open CAMERA app and capture image
-          intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI); // store
+          intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri); // store
           startActivityForResult(intent, REQUEST_SEND_CAMERA_IMAGE_CODE);    // call for next activity
         }
       }
@@ -444,28 +442,28 @@ public class ChatsActivity extends AppCompatActivity {
   private void recordAudio() {
     audioDialog = new Dialog(ChatsActivity.this);
     audioDialog.setContentView(R.layout.audio_recording_layout);
-    audioRecordBttn = audioDialog.findViewById(R.id.audio_record_bttn);
-    audioStopBttn = audioDialog.findViewById(R.id.audio_stop_bttn);
-    playbackStartBttn = audioDialog.findViewById(R.id.playback_play_bttn);
-    playbackStopBttn = audioDialog.findViewById(R.id.playback_stop_bttn);
-    sendAudioBttn = audioDialog.findViewById(R.id.audio_send_bttn);
+    audioRecordButton = audioDialog.findViewById(R.id.audio_record_bttn);
+    audioStopButton = audioDialog.findViewById(R.id.audio_stop_bttn);
+    playbackStartButton = audioDialog.findViewById(R.id.playback_play_bttn);
+    playbackStopButton = audioDialog.findViewById(R.id.playback_stop_bttn);
+    sendAudioButton = audioDialog.findViewById(R.id.audio_send_bttn);
 
     // default settings
-    audioRecordBttn.setEnabled(true);
-    audioStopBttn.setEnabled(false);
-    playbackStartBttn.setEnabled(false);
-    playbackStopBttn.setEnabled(false);
-    sendAudioBttn.setEnabled(false);
+    audioRecordButton.setEnabled(true);
+    audioStopButton.setEnabled(false);
+    playbackStartButton.setEnabled(false);
+    playbackStopButton.setEnabled(false);
+    sendAudioButton.setEnabled(false);
 
     audioDialog.show();
 
-    audioRecordBttn.setOnClickListener(new View.OnClickListener() {
+    audioRecordButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         try {
 
           // Create an empty image file
-          String timeStamp = sdf.format(new Date());
+          String timeStamp = formater.format(new Date());
           String audioFileName = "Recorded_" + timeStamp;
           File storageDir = getExternalFilesDir(Environment.DIRECTORY_MUSIC);
 
@@ -489,38 +487,38 @@ public class ChatsActivity extends AppCompatActivity {
           e.printStackTrace();
         }
 
-        audioRecordBttn.setEnabled(false);
-        audioStopBttn.setEnabled(true);
+        audioRecordButton.setEnabled(false);
+        audioStopButton.setEnabled(true);
 
         Toast.makeText(ChatsActivity.this, "Recording started", Toast.LENGTH_SHORT).show();
       }
     });
 
-    audioStopBttn.setOnClickListener(new View.OnClickListener() {
+    audioStopButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         mediaRecorder.stop();
         mediaRecorder.release();
         mediaRecorder = null;
 
-        audioRecordBttn.setEnabled(true);
-        audioStopBttn.setEnabled(false);
-        playbackStartBttn.setEnabled(true);
-        playbackStopBttn.setEnabled(false);
-        sendAudioBttn.setEnabled(true);
+        audioRecordButton.setEnabled(true);
+        audioStopButton.setEnabled(false);
+        playbackStartButton.setEnabled(true);
+        playbackStopButton.setEnabled(false);
+        sendAudioButton.setEnabled(true);
 
         Toast.makeText(ChatsActivity.this, "Recording Completed!", Toast.LENGTH_LONG);
       }
     });
 
-    playbackStartBttn.setOnClickListener(new View.OnClickListener() {
+    playbackStartButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) throws RuntimeException {
-        audioStopBttn.setEnabled(false);
-        audioRecordBttn.setEnabled(false);
-        playbackStartBttn.setEnabled(false);
-        playbackStopBttn.setEnabled(true);
-        sendAudioBttn.setEnabled(true);
+        audioStopButton.setEnabled(false);
+        audioRecordButton.setEnabled(false);
+        playbackStartButton.setEnabled(false);
+        playbackStopButton.setEnabled(true);
+        sendAudioButton.setEnabled(true);
 
         mediaPlayer = new MediaPlayer();
 
@@ -540,14 +538,14 @@ public class ChatsActivity extends AppCompatActivity {
       }
     });
 
-    playbackStopBttn.setOnClickListener(new View.OnClickListener() {
+    playbackStopButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        audioRecordBttn.setEnabled(true);
-        audioStopBttn.setEnabled(false);
-        playbackStartBttn.setEnabled(true);
-        playbackStopBttn.setEnabled(false);
-        sendAudioBttn.setEnabled(true);
+        audioRecordButton.setEnabled(true);
+        audioStopButton.setEnabled(false);
+        playbackStartButton.setEnabled(true);
+        playbackStopButton.setEnabled(false);
+        sendAudioButton.setEnabled(true);
 
         if (mediaPlayer != null) {
           mediaPlayer.stop();
@@ -556,7 +554,7 @@ public class ChatsActivity extends AppCompatActivity {
       }
     });
 
-    sendAudioBttn.setOnClickListener(new View.OnClickListener() {
+    sendAudioButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         audioUri = Uri.fromFile(audioFile);
