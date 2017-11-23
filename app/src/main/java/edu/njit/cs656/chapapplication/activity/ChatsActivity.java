@@ -72,10 +72,10 @@ public class ChatsActivity extends AppCompatActivity {
   public static String currentChatRoomId = "General";
 
   // These components help displaying a MESSAGE item
-  private RecyclerView mMessageList;
+  private RecyclerView messageListView;
   private List<Message> messagesList = new ArrayList<>();
-  private LinearLayoutManager mLinearLayout;
-  private MessageAdapter mAdapter;
+  private LinearLayoutManager linearLayoutManager;
+  private MessageAdapter messageAdapter;
 
   private EditText mChatMessageView;
 
@@ -141,7 +141,6 @@ public class ChatsActivity extends AppCompatActivity {
   protected void onResume() {
     super.onResume();
     String intentChatRoomId = getIntent().getStringExtra("chatRoomId");
-
     if (StringUtils.isNotEmpty(intentChatRoomId) && !intentChatRoomId.equals(currentChatRoomId)) {
 
       currentChatRoomId = intentChatRoomId;
@@ -265,8 +264,8 @@ public class ChatsActivity extends AppCompatActivity {
       mChatMessageView.setText("");
 
       // Scroll down to the new message
-      mMessageList.smoothScrollToPosition(mAdapter.getItemCount());
-      mLinearLayout.setStackFromEnd(true);
+      messageListView.smoothScrollToPosition(messageAdapter.getItemCount());
+      linearLayoutManager.setStackFromEnd(true);
 
 
       FirebaseDatabase.getInstance().getReference().updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
@@ -329,8 +328,8 @@ public class ChatsActivity extends AppCompatActivity {
 
           mChatMessageView.setText("");
 
-          mMessageList.smoothScrollToPosition(mAdapter.getItemCount());
-          mLinearLayout.setStackFromEnd(true);
+          messageListView.smoothScrollToPosition(messageAdapter.getItemCount());
+          linearLayoutManager.setStackFromEnd(true);
 
           FirebaseDatabase.getInstance().getReference().updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
             @Override
@@ -355,14 +354,14 @@ public class ChatsActivity extends AppCompatActivity {
    * Display all messages including text and images
    */
   private void displayMessages() {
-    mAdapter = new MessageAdapter(messagesList);
+    messageAdapter = new MessageAdapter(messagesList);
 
     // help displaying the messages
-    mLinearLayout = new LinearLayoutManager(this);
-    mMessageList = findViewById(R.id.reyclerview_message_list);
-    mMessageList.setHasFixedSize(true);
-    mMessageList.setLayoutManager(mLinearLayout);
-    mMessageList.setAdapter(mAdapter);
+    linearLayoutManager = new LinearLayoutManager(this);
+    messageListView = findViewById(R.id.reyclerview_message_list);
+    messageListView.setHasFixedSize(true);
+    messageListView.setLayoutManager(linearLayoutManager);
+    messageListView.setAdapter(messageAdapter);
 
 
     mChatAddBtn = findViewById(R.id.image_bttn);
@@ -379,7 +378,7 @@ public class ChatsActivity extends AppCompatActivity {
             // get data from dataSnapshot
             final Message message = dataSnapshot.getValue(Message.class);
             messagesList.add(message);  // add the message to the array
-            mAdapter.notifyDataSetChanged();    // notify data set
+            messageAdapter.notifyDataSetChanged();    // notify data set
           }
 
           @Override
