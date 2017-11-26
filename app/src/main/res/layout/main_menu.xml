@@ -16,7 +16,7 @@
     <item
         android:id="@+id/menu_chats"
         android:showAsAction="never"
-        android:title="Chats" />
+        android:title="Chat" />
 
     <item
         android:id="@+id/menu_profile"
