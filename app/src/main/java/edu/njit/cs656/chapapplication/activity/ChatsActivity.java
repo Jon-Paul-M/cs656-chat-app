@@ -38,7 +38,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -68,7 +67,7 @@ public class ChatsActivity extends AppCompatActivity {
     private static final int GALLERY_PICK = 1;
     private static final int REQUEST_SEND_CAMERA_IMAGE_CODE = 2;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 3;
-    private static final ConcurrentDateFormater formater = new ConcurrentDateFormater("MM/dd/yyyy hh:mm a");
+  private static final ConcurrentDateFormater formater = new ConcurrentDateFormater("yyyyMMdd_hhmmss");
 
     public static String currentChatRoomId = "General";
 
@@ -411,7 +410,7 @@ public class ChatsActivity extends AppCompatActivity {
      */
     private void dispatchTakePictureIntent() {
         // Create an empty image file
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date());
+      String timeStamp = formater.format(new Date());
         String imageFileName = "JPEG_" + timeStamp;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         try {
@@ -464,7 +463,7 @@ public class ChatsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     // Create an empty image file
-                    String timeStamp = new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date());
+                  String timeStamp = formater.format(new Date());
                     String audioFileName = "Recorded_" + timeStamp;
                     File storageDir = getExternalFilesDir(Environment.DIRECTORY_MUSIC);
 

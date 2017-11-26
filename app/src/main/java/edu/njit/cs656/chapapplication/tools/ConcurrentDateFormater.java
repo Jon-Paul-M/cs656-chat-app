@@ -8,6 +8,13 @@ import java.util.Date;
  * Created by jon-paul on 11/22/17.
  */
 
+/**
+ * Used to convert date to/from string.
+ * The default jdk DateFormat class is not thread safe.
+ * Java 8 has an alternative, but forcing java 8 could limit penetration.
+ *
+ * @author jm727@njit.edu
+ */
 public class ConcurrentDateFormater {
 
 
@@ -40,7 +47,7 @@ public class ConcurrentDateFormater {
     this.pattern = pattern;
   }
 
-  public Date parse(String dateString) {
+  synchronized public Date parse(String dateString) {
     Date date = null;
     try {
       date = dateFormat.get().parse(dateString);
@@ -50,7 +57,7 @@ public class ConcurrentDateFormater {
     return date;
   }
 
-  public String format(Date date) {
+  synchronized public String format(Date date) {
     return dateFormat.get().format(date);
   }
 
