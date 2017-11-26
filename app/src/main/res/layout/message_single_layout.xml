@@ -20,7 +20,7 @@
         android:id="@+id/audio_hyperlink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/message_text_layout"
+        android:layout_below="@+id/name_text_layout"
         android:layout_marginStart="10dp"
         android:text="Audio Hyperlink"
         android:textColor="#444444" />
@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignStart="@+id/audio_hyperlink"
-        android:layout_below="@+id/audio_hyperlink"
+        android:layout_below="@+id/name_text_layout"
         android:layout_toEndOf="@+id/audio_hyperlink"
         android:adjustViewBounds="true"
         android:paddingEnd="10dp"
