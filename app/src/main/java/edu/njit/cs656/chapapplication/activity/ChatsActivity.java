@@ -367,7 +367,7 @@ public class ChatsActivity extends AppCompatActivity {
         addImageButton = findViewById(R.id.image_bttn);
         sendMessageButton = findViewById(R.id.send_bttn);
         chatMessageView = findViewById(R.id.chat_message_view);
-
+        messagesList.clear();
         FirebaseDatabase.getInstance().getReference()
                 .child(DB_NAME_MESSAGES)
                 .child(currentChatRoomId)
