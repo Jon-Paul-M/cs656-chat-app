@@ -10,7 +10,6 @@ import com.firebase.ui.auth.AuthUI;
 
 import edu.njit.cs656.chapapplication.R;
 import edu.njit.cs656.chapapplication.activity.ChatsActivity;
-import edu.njit.cs656.chapapplication.activity.ContactsActivity;
 import edu.njit.cs656.chapapplication.activity.MainActivity;
 import edu.njit.cs656.chapapplication.activity.ProfileActivity;
 import edu.njit.cs656.chapapplication.activity.SignOutActivity;
@@ -28,10 +27,10 @@ public class OptionsMenuHelper {
       Intent intent = new Intent(activity, MainActivity.class);
       intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
       activity.startActivity(intent);
-    } else if (item.getItemId() == R.id.menu_contacts) {
+    /*} else if (item.getItemId() == R.id.menu_contacts) {
       Intent intent = new Intent(activity, ContactsActivity.class);
       intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-      activity.startActivity(intent);
+      activity.startActivity(intent);*/
     } else if (item.getItemId() == R.id.menu_chats) {
       switchToChatsActivity(activity, null);
     } else if (item.getItemId() == R.id.menu_profile) {
