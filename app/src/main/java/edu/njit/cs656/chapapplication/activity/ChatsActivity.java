@@ -410,8 +410,7 @@ public class ChatsActivity extends AppCompatActivity {
    */
   private void dispatchTakePictureIntent() {
     // Create an empty image file
-    SimpleDateFormat temp = new SimpleDateFormat("yyyyMMdd_hhmmss");  // It can't have '/' in the name
-    String timeStamp = temp.format(new Date());
+    String timeStamp = new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date());
     String imageFileName = "JPEG_" + timeStamp;
     File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
     try {
@@ -463,9 +462,8 @@ public class ChatsActivity extends AppCompatActivity {
       @Override
       public void onClick(View view) {
         try {
-
           // Create an empty image file
-          String timeStamp = formater.format(new Date());
+          String timeStamp = new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date());
           String audioFileName = "Recorded_" + timeStamp;
           File storageDir = getExternalFilesDir(Environment.DIRECTORY_MUSIC);
 
@@ -480,6 +478,8 @@ public class ChatsActivity extends AppCompatActivity {
           mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
           mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
           mediaRecorder.setOutputFile(audioOutputPath);
+
+          System.out.println(mediaRecorder);
 
           mediaRecorder.prepare();
           mediaRecorder.start();
