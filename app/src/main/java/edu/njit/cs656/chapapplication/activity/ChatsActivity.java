@@ -38,6 +38,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -409,7 +410,8 @@ public class ChatsActivity extends AppCompatActivity {
    */
   private void dispatchTakePictureIntent() {
     // Create an empty image file
-    String timeStamp = formater.format(new Date());
+    SimpleDateFormat temp = new SimpleDateFormat("yyyyMMdd_hhmmss");  // It can't have '/' in the name
+    String timeStamp = temp.format(new Date());
     String imageFileName = "JPEG_" + timeStamp;
     File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
     try {
